@@ -73,6 +73,7 @@ export default function CreateAccount() {
                 userage: age,
                 usergender: gender,
                 useremail: email,
+                userid: auth.currentUser?.uid,
             };
 
             // POST 요청을 보냄
