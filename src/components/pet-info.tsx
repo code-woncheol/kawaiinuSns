@@ -18,33 +18,51 @@ export default function PetInfo() {
     const [error, setError] = useState('');
     const [petgender, setGender] = useState('');
     const [age, setAge] = useState('');
+    const [nickname, SetNickName] = useState('');
 
     const auth = getAuth();
 
+    const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setGender(event.target.value);
+    };
+
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
         if (!auth.currentUser) {
             return;
         }
 
         e.preventDefault();
-        if (isLoading || petName === '' || breed === '' || yearOfBirth === '' || weight === '' || favSnack === '') {
+        if (isLoading || 
+            petName === '' || 
+            breed === '' || 
+            yearOfBirth === '' || 
+            weight === '' || 
+            favSnack === '') 
             return;
-        }
+            
+        
+        
         try {
             setLoading(true);
 
+            const nowUserId = auth.currentUser?.uid;
+
             //유저 정보를 API에 전송
             const petInfo = {
+                useremail: auth.currentUser?.email,
                 petname: petName,
                 petbreed: breed,
                 petage: yearOfBirth,
                 petweight: weight,
                 petsnack: favSnack,
                 petgender: petgender
+                
             };
 
             //POST 요청을 보냄
-            const response = await fetch('192.168.0.248:8080/api/v1/user/petentry', {
+            const response = await fetch('http://192.168.0.248:8080/api/v1/user/petentry', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,11 +79,7 @@ export default function PetInfo() {
         } finally {
             setLoading(false);
         }
-        console.log(petName, breed, yearOfBirth, weight, favSnack);
-    };
-
-    const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setGender(event.target.value);
+        console.log(petName, breed, yearOfBirth, weight, favSnack, petgender);
     };
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +96,8 @@ export default function PetInfo() {
             setWeight(value);
         } else if (name === 'favSnack') {
             setFavSnack(value);
+        } else if (name == 'nickname') {
+            SetNickName(value);
         }
     };
     return (
@@ -121,6 +137,13 @@ export default function PetInfo() {
                     type="text"
                     required
                 />
+                <Input 
+                    name="nickname"
+                    onChange={onChange}
+                    value={nickname}
+                    placeholder={t('nickname')}
+                    type='txt'
+                    required/>
                 <GenderSelector>
                 <RadioLabel>
                     <RadioInput 
@@ -143,7 +166,6 @@ export default function PetInfo() {
                     여아
                 </RadioLabel>
                 </GenderSelector>  
-
                 <Input type="submit" value={isLoading ? 'loading' : '확인'} />
             </Form>
         </Wrapper>
