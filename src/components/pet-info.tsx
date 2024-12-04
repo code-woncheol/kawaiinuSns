@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Form, useNavigate } from 'react-router-dom';
-import { Input, Title, Wrapper } from './auth-components';
+import { GenderSelector, Input, Title, Wrapper } from './auth-components';
 import { useTranslation } from 'react-i18next';
 import { getAuth } from 'firebase/auth';
-import { Error, PetGenderSelector, RadioInput, RadioLabel } from '../components/auth-components';
+import { Error, RadioInput, RadioLabel } from '../components/auth-components';
 import axios from 'axios';
 
 export default function PetInfo() {
@@ -16,7 +16,8 @@ export default function PetInfo() {
     const [weight, setWeight] = useState('');
     const [favSnack, setFavSnack] = useState('');
     const [error, setError] = useState('');
-    const [petgender, setPetGender] = useState('');
+    const [petgender, setGender] = useState('');
+    const [age, setAge] = useState('');
 
     const auth = getAuth();
 
@@ -39,6 +40,7 @@ export default function PetInfo() {
                 petage: yearOfBirth,
                 petweight: weight,
                 petsnack: favSnack,
+                petgender: petgender
             };
 
             //POST 요청을 보냄
@@ -61,6 +63,11 @@ export default function PetInfo() {
         }
         console.log(petName, breed, yearOfBirth, weight, favSnack);
     };
+
+    const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setGender(event.target.value);
+    };
+
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {
             target: { name, value },
@@ -81,11 +88,6 @@ export default function PetInfo() {
         <Wrapper>
             <Title>{t('Add Pet Information')}</Title>
             <Form onSubmit={onSubmit}>
-                <RadioLabel>
-                    <RadioInput required type="radio" name="petGender" value="male" checked={petgender === 'male'} />{' '}
-                    남아
-                </RadioLabel>
-
                 <Input
                     name="petName"
                     onChange={onChange}
@@ -119,6 +121,28 @@ export default function PetInfo() {
                     type="text"
                     required
                 />
+                <GenderSelector>
+                <RadioLabel>
+                    <RadioInput 
+                        required 
+                        type="radio" 
+                        name="petGender" 
+                        value="male" 
+                        checked={petgender === 'male'}
+                        onChange={handleGenderChange} 
+                    />
+                    남아
+                    <RadioInput
+                        required
+                        type="radio"
+                        name="petGender"
+                        value="female"
+                        checked={petgender === 'female'}
+                        onChange={handleGenderChange}
+                    />
+                    여아
+                </RadioLabel>
+                </GenderSelector>  
 
                 <Input type="submit" value={isLoading ? 'loading' : '확인'} />
             </Form>
