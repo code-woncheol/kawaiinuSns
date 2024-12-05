@@ -11,7 +11,7 @@ import LoadingScreen from './components/loading-screen';
 import { auth } from './firebase';
 import ProtectedRoute from './components/protected-route';
 import ResetPassword from './routes/reset-password';
-import PetInfo from './components/pet-info';
+import PetInfo from './routes/pet-info';
 const router = createBrowserRouter([
     {
         path: '/',

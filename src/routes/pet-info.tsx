@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Form, useNavigate } from 'react-router-dom';
-import { GenderSelector, Input, Title, Wrapper } from './auth-components';
+import { GenderSelector, Input, Title, Wrapper } from '../components/auth-components';
 import { useTranslation } from 'react-i18next';
 import { getAuth } from 'firebase/auth';
 import { Error, RadioInput, RadioLabel } from '../components/auth-components';
