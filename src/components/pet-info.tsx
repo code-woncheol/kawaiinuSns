@@ -51,10 +51,10 @@ export default function PetInfo() {
 
             //유저 정보를 API에 전송
             const petInfo = {
-                useremail: auth.currentUser?.email,
+                useremail: auth.currentUser.email,
                 petname: petName,
                 petbreed: breed,
-                petage: yearOfBirth,
+                peemailtage: yearOfBirth,
                 petweight: weight,
                 petsnack: favSnack,
                 petgender: petgender
