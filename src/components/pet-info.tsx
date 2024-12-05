@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Form, useNavigate } from 'react-router-dom';
-import { GenderSelector, Input, Title, Wrapper } from './auth-components';
+import { GenderSelector, Input, Title, Wrapper } from '../components/auth-components';
 import { useTranslation } from 'react-i18next';
 import { getAuth } from 'firebase/auth';
 import { Error, RadioInput, RadioLabel } from '../components/auth-components';
@@ -34,16 +34,9 @@ export default function PetInfo() {
         }
 
         e.preventDefault();
-        if (isLoading || 
-            petName === '' || 
-            breed === '' || 
-            yearOfBirth === '' || 
-            weight === '' || 
-            favSnack === '') 
+        if (isLoading || petName === '' || breed === '' || yearOfBirth === '' || weight === '' || favSnack === '')
             return;
-            
-        
-        
+
         try {
             setLoading(true);
 
@@ -57,8 +50,7 @@ export default function PetInfo() {
                 peemailtage: yearOfBirth,
                 petweight: weight,
                 petsnack: favSnack,
-                petgender: petgender
-                
+                petgender: petgender,
             };
 
             //POST 요청을 보냄
@@ -137,35 +129,36 @@ export default function PetInfo() {
                     type="text"
                     required
                 />
-                <Input 
+                <Input
                     name="nickname"
                     onChange={onChange}
                     value={nickname}
                     placeholder={t('nickname')}
-                    type='txt'
-                    required/>
+                    type="txt"
+                    required
+                />
                 <GenderSelector>
-                <RadioLabel>
-                    <RadioInput 
-                        required 
-                        type="radio" 
-                        name="petGender" 
-                        value="male" 
-                        checked={petgender === 'male'}
-                        onChange={handleGenderChange} 
-                    />
-                    남아
-                    <RadioInput
-                        required
-                        type="radio"
-                        name="petGender"
-                        value="female"
-                        checked={petgender === 'female'}
-                        onChange={handleGenderChange}
-                    />
-                    여아
-                </RadioLabel>
-                </GenderSelector>  
+                    <RadioLabel>
+                        <RadioInput
+                            required
+                            type="radio"
+                            name="petGender"
+                            value="male"
+                            checked={petgender === 'male'}
+                            onChange={handleGenderChange}
+                        />
+                        남아
+                        <RadioInput
+                            required
+                            type="radio"
+                            name="petGender"
+                            value="female"
+                            checked={petgender === 'female'}
+                            onChange={handleGenderChange}
+                        />
+                        여아
+                    </RadioLabel>
+                </GenderSelector>
                 <Input type="submit" value={isLoading ? 'loading' : '확인'} />
             </Form>
         </Wrapper>

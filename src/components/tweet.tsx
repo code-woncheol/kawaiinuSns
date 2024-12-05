@@ -6,17 +6,23 @@ import { deleteObject, ref } from 'firebase/storage';
 import { useState } from 'react';
 
 const Wrapper = styled.div`
-    display: grid;
+    display: flex;
+    flex-direction: column;
     grid-template-columns: 3fr 1fr;
     padding: 20px;
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 15px;
     border: 1px solid black;
 `;
-const Column = styled.div``;
+const Column = styled.div`
+    width: 100%;
+    &:last-child {
+        place-self: end;
+    }
+`;
 const Photo = styled.img`
-    width: 100px;
-    height: 100px;
+    width: 90%;
+    height: auto;
     border-radius: 15px;
 `;
 const Username = styled.span`
@@ -36,6 +42,8 @@ const Payload_edit = styled.textarea`
 
 const DeletButton = styled.button`
     background-color: #ff6f61;
+    width: 100px;
+    text-align: center;
     color: white;
     font-weight: 600;
     border: 0;
@@ -99,6 +107,7 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
 
     return (
         <Wrapper>
+            {/* 왼쪽 영역 */}
             <Column>
                 <Username>{username}</Username>
                 {isEditing ? (
@@ -106,14 +115,13 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
                 ) : (
                     <Payload>{tweet}</Payload>
                 )}
-                {user?.uid === userId && (
-                    <>
-                        <DeletButton onClick={onDelete}>Delete</DeletButton>
-                        <EditButton onClick={onEdit}>{isEditing ? 'Save' : 'Edit'}</EditButton>
-                    </>
-                )}
             </Column>
+
+            {/* 오른쪽 영역: 사진 표시 */}
             <Column>{photo && <Photo src={photo} />}</Column>
+
+            {/* 버튼 영역 */}
+            {user?.uid === userId && <DeletButton onClick={onDelete}>Delete</DeletButton>}
         </Wrapper>
     );
 }

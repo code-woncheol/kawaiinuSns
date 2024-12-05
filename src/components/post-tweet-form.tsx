@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { auth, db, storage } from '../firebase';
 import { collection, addDoc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -78,7 +78,12 @@ export default function PostTweetForm() {
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const user = auth.currentUser;
-        if (!user || isLoading || tweet === '' || tweet.length > 180) {
+        if (
+            !user ||
+            isLoading ||
+            // || tweet === ''글 안써도 올라가지게
+            tweet.length > 180
+        ) {
             return;
         }
         try {
@@ -91,12 +96,12 @@ export default function PostTweetForm() {
             });
             if (file) {
                 const locationRef = ref(storage, `tweets/${user.uid}/${doc.id}`);
-
                 const result = await uploadBytes(locationRef, file);
                 const url = await getDownloadURL(result.ref);
-                await updateDoc(doc, {
-                    photo: url,
-                });
+                console.log('Photo uploaded to Storage, URL:', url);
+                // Firestore 문서에 photo 필드 업데이트
+                await updateDoc(doc, { photo: url });
+                console.log('Firestore document updated with photo URL');
             }
             setTweet('');
             setFile(null);
@@ -108,7 +113,7 @@ export default function PostTweetForm() {
     };
     return (
         <Form onSubmit={onSubmit}>
-            <TextArea rows={5} maxLength={180} onChange={onChange} value={tweet} placeholder="What is happening" />
+            {/* <TextArea rows={5} maxLength={180} onChange={onChange} value={tweet} placeholder="What is happening" /> */}
             <AttachFileButton htmlFor="file">{file ? 'Photo added ✅' : 'Add photo'}</AttachFileButton>
             <AttachFileInput onChange={onFileChange} type="file" id="file" accept="image/*" />
             <SubmitBtn type="submit" value={isLoading ? 'Posting...' : 'Post Tweet'} disabled={isLoading} />
