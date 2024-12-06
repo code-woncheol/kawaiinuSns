@@ -154,7 +154,6 @@ export default function Profile() {
     useEffect(() => {
         fetchTweets();
     }, []);
-
     return (
         <Wrapper>
             <AvatarUpload htmlFor="avatar">

@@ -28,7 +28,7 @@ export default function Timeline() {
         const fetchTweets = async () => {
             const tweetsQuery = query(collection(db, 'tweets'), orderBy('createAt', 'desc'), limit(35));
 
-            unsubscribe = await onSnapshot(tweetsQuery, (snapshot) => {
+            unsubscribe = onSnapshot(tweetsQuery, (snapshot) => {
                 const tweets = snapshot.docs.map((doc) => {
                     const { tweet, createAt, userId, username, photo } = doc.data();
                     console.log('Fetched tweet data:', { tweet, createAt, userId, username, photo }); // 확인용 로그
