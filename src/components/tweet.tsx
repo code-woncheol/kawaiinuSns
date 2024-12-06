@@ -43,38 +43,40 @@ const DeletButton = styled.label`
     padding: 5px 10px;
     text-transform: uppercase;
     border-radius: 5px;
-    cursor: pointer;
     margin-top: 10px;
     position: relative;
 
     left: 70%;
     svg {
         width: 50px;
+        
     }
 `;
 const AvatarImg = styled.img`
     width: 100%;
 `;
 const AvatarUpload = styled.label`
-    width: 10%;
+    width: 40px;
+    height: 40px;
     overflow: hidden;
-
     border-radius: 50%;
     background-color: #9bb4ff;
     cursor: pointer;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    
     svg {
-        width: 50px;
+        width: 24px;  /* 원하는 크기로 설정 */
+        height: 24px; /* 원하는 크기로 설정 */
     }
 `;
+
 const UserInfo = styled.div`
     display: flex;
     align-items: center; /* 세로로 중앙 정렬 */
     justify-content: flex-start; /* 왼쪽 정렬 */
     padding: 10px;
-    margin: auto;
 `;
 export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
     const user = auth.currentUser;
@@ -120,7 +122,7 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
                     {avatar ? (
                         <AvatarImg src={avatar} />
                     ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="auto" fill="white">
                             <path
                                 fillRule="evenodd"
                                 d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
