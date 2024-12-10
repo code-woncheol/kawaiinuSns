@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import likeOnSVG from '../assets/like_on.svg';
 import likeOffSVG from '../assets/like_off.svg';
 import { auth, storage, db } from '../firebase';
-import firebase from 'firebase/compat/app';
 
 // LikeButton 스타일 정의
 const LikeButton = styled.img`
@@ -16,7 +15,7 @@ export default function Like({ userId, feedId }: LikeProps): JSX.Element {
     const [isLiked, setIsLiked] = useState<boolean>(false);
 
     userId = auth.currentUser?.uid;
-
+    // feedId =
     // 좋아요 상태 토글 함수
     const toggleLike = async (): Promise<void> => {
         try {
@@ -35,8 +34,16 @@ export default function Like({ userId, feedId }: LikeProps): JSX.Element {
             // 성공적으로 응답을 받은 경우 상태 변경
             if (response.ok) {
                 setIsLiked((prev) => !prev);
+                console.log('feedId');
+                console.log(feedId);
+                console.log('userId');
+                console.log(userId);
             } else {
                 console.error('Failed to toggle like');
+                console.log('feedId');
+                console.log(feedId);
+                console.log('userId');
+                console.log(userId);
             }
         } catch (error) {
             console.error('Error while toggling like:', error);

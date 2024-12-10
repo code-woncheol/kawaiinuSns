@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { getAuth } from 'firebase/auth';
 import { Error, RadioInput, RadioLabel } from '../components/auth-components';
 import axios from 'axios';
+import AddpageHeader from '../components/addPageHeader';
 
 export default function PetInfo() {
     const navigate = useNavigate();
@@ -94,7 +95,7 @@ export default function PetInfo() {
     };
     return (
         <Wrapper>
-            <Title>{t('Add Pet Information')}</Title>
+            <AddpageHeader title={t('joinKawaiinu')} />
             <Form onSubmit={onSubmit}>
                 <Input
                     name="petName"

@@ -6,6 +6,8 @@ import { updateProfile } from 'firebase/auth';
 import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 import { ITweet } from '../components/timeline';
 import Tweet from '../components/tweet';
+import Menu from './home';
+import MainpageHeader from '../components/mainPageHeader';
 
 const NameInput = styled.input`
     background-color: white;
@@ -156,6 +158,7 @@ export default function Profile() {
     }, []);
     return (
         <Wrapper>
+            <MainpageHeader />
             <AvatarUpload htmlFor="avatar">
                 {avatar ? (
                     <AvatarImg src={avatar} />
@@ -181,6 +184,7 @@ export default function Profile() {
                     <Tweet key={tweet.id} {...tweet} />
                 ))}
             </Tweets>
+            <Menu />
         </Wrapper>
     );
 }
