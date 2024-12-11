@@ -158,7 +158,6 @@ export default function Profile() {
     }, []);
     return (
         <>
-        
         <MainpageHeader />
             <Wrapper>
             <AvatarUpload htmlFor="avatar">
@@ -187,7 +186,6 @@ export default function Profile() {
                     <Tweet key={tweet.id} {...tweet} />
                 ))}
             </Tweets>
-            <Menu />
         </Wrapper>
         </>
     );
