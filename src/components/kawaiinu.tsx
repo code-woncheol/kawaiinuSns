@@ -1,8 +1,12 @@
 import styled from 'styled-components';
 import kawaiinu from '../assets/kawaiinu.png';
+
 const Wrapper = styled.div`
-    margin-top: 50px;
+    position: fixed;
+    right: 69%;
+    
 `;
+
 
 const KawaiinuImg = styled.img`
     height: 32px;

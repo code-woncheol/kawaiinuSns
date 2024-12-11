@@ -157,8 +157,10 @@ export default function Profile() {
         fetchTweets();
     }, []);
     return (
-        <Wrapper>
-            <MainpageHeader />
+        <>
+        
+        <MainpageHeader />
+            <Wrapper>
             <AvatarUpload htmlFor="avatar">
                 {avatar ? (
                     <AvatarImg src={avatar} />
@@ -179,6 +181,7 @@ export default function Profile() {
                 <Name>{name ?? 'Anonymous'}</Name>
             )}
             <ChangeNameBtn onClick={onChangeNameClick}>{editMode ? 'Save' : 'Change Name'}</ChangeNameBtn>
+
             <Tweets>
                 {tweets.map((tweet) => (
                     <Tweet key={tweet.id} {...tweet} />
@@ -186,5 +189,6 @@ export default function Profile() {
             </Tweets>
             <Menu />
         </Wrapper>
+        </>
     );
 }

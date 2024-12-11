@@ -9,13 +9,17 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 const Wrapper = styled.div`
     position: relative; /* 자식 요소의 absolute 기준을 잡기 위해 필요 */
     display: inline-block; /* 버튼 크기에 맞게 wrapping */
-    margin-top: 0px;
-    left: 90%;
+    margin-top: 30px;
+    left: 75%;
+    position: fixed;
+    top: 0; /* 하단 위치 */
+    
 `;
 
 const UploadButton = styled.img`
     width: 24px;
     height: 24px;
+    
 `;
 
 const UploadButtonCircle = styled.img`
