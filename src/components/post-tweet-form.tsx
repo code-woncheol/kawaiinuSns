@@ -4,6 +4,7 @@ import { auth, db, storage } from '../firebase';
 import { collection, addDoc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useTranslation } from 'react-i18next';
+import UploadBtn from './uploadBtn';
 
 const Form = styled.form`
     display: flex;
@@ -140,14 +141,14 @@ export default function PostTweetForm() {
     return (
         <Form onSubmit={onSubmit}>
             {/* <TextArea rows={5} maxLength={180} onChange={onChange} value={tweet} placeholder="What is happening" /> */}
-            <AttachFileButton htmlFor="file">{file ? 'Photo added ✅' : 'Add photo'}</AttachFileButton>
+            {/* <AttachFileButton htmlFor="file">{file ? 'Photo added ✅' : 'Add photo'}</AttachFileButton>
             <AttachFileInput onChange={onFileChange} type="file" id="file" accept="image/*" />
             <SubmitBtn
                 type="submit"
                 value={isLoading ? 'Posting...' : 'Post Tweet'}
                 disabled={isLoading || !file}
                 hasFile={!!file}
-            />
+            /> */}
         </Form>
     );
 }

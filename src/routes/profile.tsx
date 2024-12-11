@@ -6,6 +6,8 @@ import { updateProfile } from 'firebase/auth';
 import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 import { ITweet } from '../components/timeline';
 import Tweet from '../components/tweet';
+import Menu from './home';
+import MainpageHeader from '../components/mainPageHeader';
 
 const NameInput = styled.input`
     background-color: white;
@@ -155,7 +157,10 @@ export default function Profile() {
         fetchTweets();
     }, []);
     return (
-        <Wrapper>
+        <>
+        
+        <MainpageHeader />
+            <Wrapper>
             <AvatarUpload htmlFor="avatar">
                 {avatar ? (
                     <AvatarImg src={avatar} />
@@ -176,11 +181,14 @@ export default function Profile() {
                 <Name>{name ?? 'Anonymous'}</Name>
             )}
             <ChangeNameBtn onClick={onChangeNameClick}>{editMode ? 'Save' : 'Change Name'}</ChangeNameBtn>
+
             <Tweets>
                 {tweets.map((tweet) => (
                     <Tweet key={tweet.id} {...tweet} />
                 ))}
             </Tweets>
+            <Menu />
         </Wrapper>
+        </>
     );
 }

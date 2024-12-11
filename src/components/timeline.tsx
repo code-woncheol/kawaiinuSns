@@ -17,7 +17,8 @@ const Wrapper = styled.div`
     display: flex;
     gap: 10px;
     flex-direction: column;
-    overflow-y: scroll;
+    overflow-y: scroll; /* 세로 스크롤 가능 */
+    overflow-x: hidden; /* 가로 스크롤 막기 */
 `;
 
 export default function Timeline() {
