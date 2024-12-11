@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { auth, db, storage } from '../firebase';
 import { collection, addDoc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { useTranslation } from 'react-i18next';
+import UploadBtn from './uploadBtn';
+
 const Form = styled.form`
     display: flex;
     flex-direction: column;
@@ -42,17 +45,17 @@ const AttachFileButton = styled.label`
     }
 `;
 
-const SubmitBtn = styled.input`
-    background-color: #9bb4ff;
+const SubmitBtn = styled.input<{ hasFile: boolean }>`
+    background-color: ${(props) => (props.hasFile ? '#9bb4ff' : '#d3d3d3')}; /* 회색 (파일이 없을 경우) */
     color: white;
     border: none;
     padding: 10px 0px;
     border-radius: 20px;
     font-size: 16px;
-    cursor: pointer;
+    cursor: ${(props) => (props.hasFile ? 'pointer' : 'not-allowed')};
     &:hover,
     &:active {
-        opacity: 0.9;
+        opacity: ${(props) => (props.hasFile ? 0.9 : 1)};
     }
 `;
 
@@ -64,6 +67,9 @@ export default function PostTweetForm() {
     const [isLoading, setLoading] = useState(false);
     const [tweet, setTweet] = useState('');
     const [file, setFile] = useState<File | null>(null);
+    const [error, setError] = useState('');
+    const { t } = useTranslation();
+
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setTweet(e.target.value);
     };
@@ -78,11 +84,18 @@ export default function PostTweetForm() {
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const user = auth.currentUser;
-        if (!user || isLoading || tweet === '' || tweet.length > 180) {
+        // 파일이 없으면 alert을 띄우고, 트윗을 게시하지 않음
+        if (!file) {
+            alert('Please upload a file before posting a tweet.');
+            return;
+        }
+
+        if (!user || isLoading) {
             return;
         }
         try {
             setLoading(true);
+
             const doc = await addDoc(collection(db, 'tweets'), {
                 tweet,
                 createAt: Date.now(),
@@ -91,12 +104,31 @@ export default function PostTweetForm() {
             });
             if (file) {
                 const locationRef = ref(storage, `tweets/${user.uid}/${doc.id}`);
-
                 const result = await uploadBytes(locationRef, file);
                 const url = await getDownloadURL(result.ref);
-                await updateDoc(doc, {
-                    photo: url,
+                console.log('Photo uploaded to Storage, URL:', url);
+                // Firestore 문서에 photo 필드 업데이트
+                await updateDoc(doc, { photo: url });
+                console.log('Firestore document updated with photo URL');
+
+                //mysql에 사진정보 넣기
+                const feedInfo = {
+                    picture: doc.id,
+                    userid: user.uid,
+                };
+
+                // POST 요청을 보냄
+                const response = await fetch('http://192.168.0.248:8080/api/v1/feed/feedsave', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(feedInfo),
                 });
+                if (!response.ok) {
+                    setError(t('serverError'));
+                    return;
+                }
             }
             setTweet('');
             setFile(null);
@@ -108,10 +140,15 @@ export default function PostTweetForm() {
     };
     return (
         <Form onSubmit={onSubmit}>
-            <TextArea rows={5} maxLength={180} onChange={onChange} value={tweet} placeholder="What is happening" />
-            <AttachFileButton htmlFor="file">{file ? 'Photo added ✅' : 'Add photo'}</AttachFileButton>
+            {/* <TextArea rows={5} maxLength={180} onChange={onChange} value={tweet} placeholder="What is happening" /> */}
+            {/* <AttachFileButton htmlFor="file">{file ? 'Photo added ✅' : 'Add photo'}</AttachFileButton>
             <AttachFileInput onChange={onFileChange} type="file" id="file" accept="image/*" />
-            <SubmitBtn type="submit" value={isLoading ? 'Posting...' : 'Post Tweet'} disabled={isLoading} />
+            <SubmitBtn
+                type="submit"
+                value={isLoading ? 'Posting...' : 'Post Tweet'}
+                disabled={isLoading || !file}
+                hasFile={!!file}
+            /> */}
         </Form>
     );
 }
