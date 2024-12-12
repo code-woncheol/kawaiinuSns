@@ -6,6 +6,8 @@ import { updateProfile } from 'firebase/auth';
 import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 import { ITweet } from '../components/timeline';
 import Tweet from '../components/tweet';
+import Menu from './home';
+import MainpageHeader from '../components/mainPageHeader';
 
 const NameInput = styled.input`
     background-color: white;
@@ -155,12 +157,14 @@ export default function Profile() {
         fetchTweets();
     }, []);
     return (
-        <Wrapper>
+        <>
+        <MainpageHeader />
+            <Wrapper>
             <AvatarUpload htmlFor="avatar">
                 {avatar ? (
                     <AvatarImg src={avatar} />
                 ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
                         <path
                             fillRule="evenodd"
                             d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
@@ -176,11 +180,13 @@ export default function Profile() {
                 <Name>{name ?? 'Anonymous'}</Name>
             )}
             <ChangeNameBtn onClick={onChangeNameClick}>{editMode ? 'Save' : 'Change Name'}</ChangeNameBtn>
+
             <Tweets>
                 {tweets.map((tweet) => (
                     <Tweet key={tweet.id} {...tweet} />
                 ))}
             </Tweets>
         </Wrapper>
+        </>
     );
 }
