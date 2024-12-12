@@ -89,12 +89,6 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
     const user = auth.currentUser;
     const [avatar, setAvatar] = useState<string | null | undefined>(user?.photoURL);
 
-    console.log('#################################');
-    console.log('tweet: ',tweet);
-    console.log('userId: ',userId);
-    console.log('id: ',id);
-    console.log('#################################');
-
     // user의 photoURL이 변경될 때마다 avatar 상태를 업데이트
     useEffect(() => {
         // userId에 해당하는 아바타 사진을 가져옴
