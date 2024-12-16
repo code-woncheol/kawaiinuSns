@@ -8,7 +8,13 @@ import { ITweet } from '../components/timeline';
 import Tweet from '../components/tweet';
 import Menu from './home';
 import MainpageHeader from '../components/mainPageHeader';
+import pencil from '../assets/pencil.svg';
 
+const NameWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 이름과 버튼 사이 간격 */
+`;
 const NameInput = styled.input`
     background-color: white;
     font-size: 22px;
@@ -16,6 +22,12 @@ const NameInput = styled.input`
     color: black;
     border: 1px solid black;
     border-radius: 15px;
+`;
+
+const ChangeNameBtn1 = styled.img`
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
 `;
 
 const ChangeNameBtn = styled.button`
@@ -46,7 +58,6 @@ const AvatarUpload = styled.label`
     border-radius: 50%;
     background-color: #9bb4ff;
     cursor: pointer;
-    display: flex;
     justify-content: center;
     align-items: center;
     svg {
@@ -158,35 +169,37 @@ export default function Profile() {
     }, []);
     return (
         <>
-        <MainpageHeader />
+            <MainpageHeader />
             <Wrapper>
-            <AvatarUpload htmlFor="avatar">
-                {avatar ? (
-                    <AvatarImg src={avatar} />
-                ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
-                        <path
-                            fillRule="evenodd"
-                            d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
-                            clipRule="evenodd"
-                        />
-                    </svg>
-                )}
-            </AvatarUpload>
-            <AvatarInput onChange={onAvatarChange} id="avatar" type="file" accept="image/*" />
-            {editMode ? (
-                <NameInput onChange={onNameChange} type="text" value={name} />
-            ) : (
-                <Name>{name ?? 'Anonymous'}</Name>
-            )}
-            <ChangeNameBtn onClick={onChangeNameClick}>{editMode ? 'Save' : 'Change Name'}</ChangeNameBtn>
-
-            <Tweets>
-                {tweets.map((tweet) => (
-                    <Tweet key={tweet.id} {...tweet} />
-                ))}
-            </Tweets>
-        </Wrapper>
+                <AvatarUpload htmlFor="avatar">
+                    {avatar ? (
+                        <AvatarImg src={avatar} />
+                    ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+                            <path
+                                fillRule="evenodd"
+                                d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                    )}
+                </AvatarUpload>
+                <AvatarInput onChange={onAvatarChange} id="avatar" type="file" accept="image/*" />
+                <NameWrapper>
+                    {editMode ? (
+                        <NameInput onChange={onNameChange} type="text" value={name} />
+                    ) : (
+                        <Name>{name ?? 'Anonymous'}</Name>
+                    )}
+                    <ChangeNameBtn1 src={pencil} onClick={onChangeNameClick} />
+                </NameWrapper>
+                {/* <ChangeNameBtn onClick={onChangeNameClick}>{editMode ? 'Save' : 'Change Name'}</ChangeNameBtn> */}
+                <Tweets>
+                    {tweets.map((tweet) => (
+                        <Tweet key={tweet.id} {...tweet} />
+                    ))}
+                </Tweets>
+            </Wrapper>
         </>
     );
 }

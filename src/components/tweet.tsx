@@ -19,9 +19,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     grid-template-columns: 3fr 1fr;
     padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 15px;
-    border: 1px solid black;
 `;
 const Column = styled.div`
     width: 100%;
@@ -31,11 +29,22 @@ const Column = styled.div`
     align-items: center; /* 가로 축 정렬 */
     margin: auto;
 `;
-const Photo = styled.img`
-    width: 95%;
-    height: auto;
-    border-radius: 15px;
+const PhotoWrapper = styled.div`
+    width: 430px; // 정사각형 크기 설정
+    height: 430px; // 정사각형 크기 설정
+    overflow: hidden; // 이미지가 부모 컨테이너를 넘지 않도록 설정
+    position: relative; // 이미지의 위치를 부모에 맞추기 위해 사용
 `;
+
+const Photo = styled.img`
+    width: 100%; // 부모 요소의 크기를 채우도록 설정
+    height: 100%; // 부모 요소의 크기를 채우도록 설정
+    object-fit: cover; // 이미지 비율을 유지하면서 크롭하여 채움
+    position: absolute; // 부모에 맞게 위치 설정
+    top: 0;
+    left: 0;
+`;
+
 const Username = styled.span`
     font-weight: 600;
     font-size: 15px;
@@ -97,8 +106,8 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
             .then((url) => {
                 setAvatar(url); // URL을 state로 설정
             })
-            .catch((error) => {
-                console.error('Error fetching avatar:', error);
+            .catch(() => {
+                setAvatar(null); // 사진이 없을 경우 null 설정
             });
     }, [userId]); // userId가 변경될 때마다 아바타를 업데이트
 
@@ -160,7 +169,9 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
             </UserInfo>
 
             {/* 사진 영역: 사진이 있을 경우 사진 표시 */}
-            <Column>{photo && <Photo src={photo} />}</Column>
+            <Column>
+                <PhotoWrapper>{photo && <Photo src={photo} />}</PhotoWrapper>
+            </Column>
             <Actions>
                 <Like userId={userId} feedId={id} /> {/* feedId를 Like 컴포넌트에 전달 */}
                 <Comment feedId={id} />
