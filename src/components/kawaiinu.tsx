@@ -23,7 +23,7 @@ const MenuItem = styled.div`
     justify-content: center;
     height: 50px;
     width: 120px;
-    margin-top: 0px; /* KawaiinuImg와 버튼 사이 간격 */
+    /* KawaiinuImg와 버튼 사이 간격 */
     background-color: #d9d9d9;
     border-radius: 20px;
     position: absolute; /* 절대 위치 설정 */

@@ -9,6 +9,25 @@ import Tweet from '../components/tweet';
 import Menu from './home';
 import MainpageHeader from '../components/mainPageHeader';
 import pencil from '../assets/pencil.svg';
+import MyPageSelector from '../components/myPageSelector';
+
+const AvatarGrid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); // 3개의 열로 설정
+    gap: 15px; // 사진 간격 설정
+    width: 90%; // 전체 영역 사용
+    justify-content: center; // 각 셀의 내용을 중앙 정렬
+    padding-bottom: 80px;
+`;
+const AvatarImgGrid = styled.img`
+    width: 100%; // 그리드 셀 크기에 맞게 조정
+    height: auto; // 비율 유지
+    aspect-ratio: 1; // 정사각형 유지
+    object-fit: cover; // 이미지 잘림 없이 채우기
+    border-radius: 10px; // 이미지 테두리 둥글게
+    border: 1px solid #ddd; // 테두리 색상 설정
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // 그림자 추가
+`;
 
 const NameWrapper = styled.div`
     display: flex;
@@ -30,16 +49,6 @@ const ChangeNameBtn1 = styled.img`
     cursor: pointer;
 `;
 
-const ChangeNameBtn = styled.button`
-    background-color: white;
-    color: black;
-    padding: 10px 5px;
-    font-size: 15px;
-    border-radius: 10px;
-    border: 0.1px solid black;
-    min-width: 110px;
-`;
-
 const Name = styled.span`
     font-size: 22px;
 `;
@@ -49,6 +58,7 @@ const Wrapper = styled.div`
     align-items: center;
     flex-direction: column;
     gap: 20px;
+    padding-top: 100px;
 `;
 
 const AvatarUpload = styled.label`
@@ -73,11 +83,36 @@ const AvatarInput = styled.input`
     display: none;
 `;
 
+const BioWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+`;
+
+const BioInput = styled.textarea`
+    background-color: white;
+    font-size: 18px;
+    color: black;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    width: 300px;
+    height: 100px;
+    resize: none;
+`;
+
+const Bio = styled.div`
+    font-size: 18px;
+`;
+
 const Tweets = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow-y: auto; /* 필요시 스크롤 활성화 */
+    padding-bottom: 60px; /* 마지막 요소를 위한 여백 */
+    box-sizing: border-box;
 `;
 
 export default function Profile() {
@@ -86,6 +121,34 @@ export default function Profile() {
     const [tweets, setTweets] = useState<ITweet[]>([]);
     const [name, setName] = useState(user?.displayName ?? 'Anonymous');
     const [editMode, setEditMode] = useState(false);
+    const [bioEditMode, setBioEditMode] = useState(false);
+    const [bio, setBio] = useState<string>('');
+    const [dogName, setDogName] = useState<string | null>(null); // 강아지 이름 상태
+    const [dogAge, setDogAge] = useState<number | null>(null); /
+
+    // 자기소개글 가져오기
+    const fetchBio = async () => {
+        if (!user) return;
+        try {
+            const apiURL = `http://192.168.0.248:8080/api/v1/user/userInfoSelect`;
+            const requestBody = {
+                useremail: user.email, // 임시 (이메일 불러와야함함)
+            };
+            const response = await fetch(apiURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            });
+            const data = await response.json();
+            if (data && data[0]) {
+                setBio(data[0].userintroduce || 'No bio yet');
+            }
+        } catch (error) {
+            console.log('Error fetching bio:', error);
+        }
+    };
 
     const onChangeNameClick = async () => {
         if (!user) return;
@@ -120,6 +183,39 @@ export default function Profile() {
             console.log('Error updating nickname:', error);
         } finally {
             setEditMode(false);
+        }
+    };
+
+    const onBioChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setBio(event.target.value);
+    };
+
+    const onBioSave = async () => {
+        if (!user) return;
+        setBioEditMode(false);
+        try {
+            const nowUserId = user.uid;
+            const apiURL = `http://192.168.0.248:8080/api/v1/user/introduce`;
+            const requestBody = {
+                userid: nowUserId,
+                userintroduce: bio,
+            };
+
+            const response = await fetch(apiURL, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to update bio: ${response.statusText}`);
+            }
+
+            console.log('Bio updated successfully.');
+        } catch (error) {
+            console.log('Error updating bio:', error);
         }
     };
 
@@ -166,10 +262,10 @@ export default function Profile() {
 
     useEffect(() => {
         fetchTweets();
+        fetchBio();
     }, []);
     return (
         <>
-            <MainpageHeader />
             <Wrapper>
                 <AvatarUpload htmlFor="avatar">
                     {avatar ? (
@@ -194,11 +290,38 @@ export default function Profile() {
                     <ChangeNameBtn1 src={pencil} onClick={onChangeNameClick} />
                 </NameWrapper>
                 {/* <ChangeNameBtn onClick={onChangeNameClick}>{editMode ? 'Save' : 'Change Name'}</ChangeNameBtn> */}
-                <Tweets>
-                    {tweets.map((tweet) => (
-                        <Tweet key={tweet.id} {...tweet} />
+
+                {/* 자기소개 여기 */}
+                <BioWrapper>
+                    {bioEditMode ? (
+                        <>
+                            <BioInput onChange={onBioChange} value={bio} />
+                            <button onClick={onBioSave}>Save</button>
+                        </>
+                    ) : (
+                        <Bio>{bio ?? 'No bio yet'}</Bio>
+                    )}
+                    <ChangeNameBtn1 src={pencil} onClick={() => setBioEditMode(!bioEditMode)} />
+                </BioWrapper>
+
+                <MyPageSelector />
+                {/* <>
+                    <Tweets>
+                        {tweets.map((tweet) => (
+                            <Tweet key={tweet.id} {...tweet} />
+                        ))}
+                    </Tweets>
+                </> */}
+
+                <AvatarGrid>
+                    {tweets.map((tweet, index) => (
+                        <AvatarImgGrid
+                            key={index}
+                            src={tweet.photo || 'https://via.placeholder.com/150'}
+                            alt={`Tweet ${index + 1}`}
+                        />
                     ))}
-                </Tweets>
+                </AvatarGrid>
             </Wrapper>
         </>
     );

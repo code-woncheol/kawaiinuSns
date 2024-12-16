@@ -12,11 +12,13 @@ import { auth } from './firebase';
 import ProtectedRoute from './components/protected-route';
 import ResetPassword from './routes/reset-password';
 import PetInfo from './routes/pet-info';
+import MainpageHeader from './components/mainPageHeader';
 const router = createBrowserRouter([
     {
         path: '/',
         element: (
             <ProtectedRoute>
+                <MainpageHeader />
                 <Layout />
             </ProtectedRoute>
         ),

@@ -9,9 +9,9 @@ const Header = styled.div`
     height: 80px;
     background-color: #ffffff;
     display: flex;
+    padding: 0;
     align-items: center;
     justify-content: space-between;
-    padding: 0 0px;
     z-index: 1000;
     @media (max-width: 768px) {
         height: 60px;
@@ -24,7 +24,6 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: space-between;
     height: 100vh;
-    padding-top: 100px;
     width: 100%;
     max-width: 860px;
     margin: 0 auto;

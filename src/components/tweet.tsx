@@ -7,19 +7,23 @@ import { useState, useEffect } from 'react';
 import Like from './like';
 import Comment from './comment';
 import { getDownloadURL } from 'firebase/storage';
-
 const Actions = styled.div`
     display: flex;
-    justify-content: flex-start; /* 왼쪽 정렬 */
-    gap: 10px; /* 요소 간 간격 */
-    margin-top: 10px; /* 위쪽에 간격을 추가 */
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 10px;
+    position: relative;
+    z-index: 1;
 `;
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    grid-template-columns: 3fr 1fr;
     padding: 20px;
     border-radius: 15px;
+    overflow: visible;
+    margin-bottom: 0px; /* 트윗 간 여백 추가 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 트윗 강조를 위한 그림자 */
+    background-color: #fff; /* 트윗 배경색 */
 `;
 const Column = styled.div`
     width: 100%;
