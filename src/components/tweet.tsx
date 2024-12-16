@@ -111,27 +111,26 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
             // Firebase에서 tweet 삭제
             await deleteDoc(doc(db, 'tweets', id));
 
+            // api 게시글 삭제 호출
+            const response = await fetch('http://192.168.0.248:8080/api/v1/feed/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    feedid: id,
+                }),
+            });
+            if (response.ok) {
+                console.log('delete successfully');
+            } else {
+                console.error('Failed to delete');
+            }
+
             // 해당 tweet에 사진이 있을 경우 삭제
             if (photo) {
                 const photoRef = ref(storage, `tweets/${user.uid}/${id}`);
                 await deleteObject(photoRef);
-
-                const response = await fetch('http://192.168.0.248:8080/api/v1/feed/delete', {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        userid: userId,
-                        feedid: id,
-                    }),
-                });
-
-                if (response.ok) {
-                    console.log('delete successfully');
-                } else {
-                    console.error('Failed to delete');
-                }
             }
         } catch (e) {
             console.error('Error deleting tweet:', e);
