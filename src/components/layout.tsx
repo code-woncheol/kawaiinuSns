@@ -23,7 +23,7 @@ const Menu = styled.div`
     align-items: center;
     gap: 20px;
     padding: 10px 0;
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     border-top: 1px solid #e9ecef;
     z-index: 1000; /* 다른 요소 위에 배치 */
 `;
@@ -34,13 +34,13 @@ interface MenuItemProps {
 
 const MenuItem = styled.div<MenuItemProps>`
     cursor: pointer;
-
-    display: flex;
+    display: grid;
+    margin-left: 50px;
+    margin-right: 50px;
     align-items: center;
     justify-content: center;
     height: 50px;
     width: 50px;
-    border-radius: 50%;
     svg {
         width: 30px;
         fill: none;
@@ -83,7 +83,7 @@ export default function Layout() {
                         <svg width="48" height="37" viewBox="0 0 48 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M1 20.5235C5.54196 7.93672 15.8407 -2.05905 28.6948 1.86414C37.6642 4.60175 33.9014 9.70322 37.3869 13.0571C39.3534 14.57 44.6925 12.5393 46.0734 14.4282C47.2943 16.0988 46.4122 19.1465 46.0734 21.1471C44.7371 29.0357 35.694 30.1969 28.0325 30.1969"
-                                stroke="black"
+                                stroke="black ! import"
                                 stroke-opacity="0.9"
                                 stroke-width="2"
                                 stroke-linecap="round"
@@ -157,21 +157,6 @@ export default function Layout() {
                         </svg>
                     </MenuItem>
                 </Link>
-
-                <MenuItem className="log-out" onClick={onLogOut}>
-                    <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path
-                            clipRule="evenodd"
-                            fillRule="evenodd"
-                            d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z"
-                        />
-                        <path
-                            clipRule="evenodd"
-                            fillRule="evenodd"
-                            d="M19 10a.75.75 0 0 0-.75-.75H8.704l1.048-.943a.75.75 0 1 0-1.004-1.114l-2.5 2.25a.75.75 0 0 0 0 1.114l2.5 2.25a.75.75 0 1 0 1.004-1.114l-1.048-.943h9.546A.75.75 0 0 0 19 10Z"
-                        />
-                    </svg>
-                </MenuItem>
             </Menu>
         </Wrapper>
     );
