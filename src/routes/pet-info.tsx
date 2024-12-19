@@ -48,7 +48,7 @@ export default function PetInfo() {
                 useremail: auth.currentUser.email,
                 petname: petName,
                 petbreed: breed,
-                peemailtage: yearOfBirth,
+                petage: yearOfBirth,
                 petweight: weight,
                 petsnack: favSnack,
                 petgender: petgender,

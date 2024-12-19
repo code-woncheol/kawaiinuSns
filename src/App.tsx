@@ -13,6 +13,7 @@ import ProtectedRoute from './components/protected-route';
 import ResetPassword from './routes/reset-password';
 import PetInfo from './routes/pet-info';
 import MainpageHeader from './components/mainPageHeader';
+import Bell from './routes/alarm';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
             {
                 path: 'pet-info',
                 element: <PetInfo />,
+            },
+            {
+                path: 'alarm',
+                element: <Bell />,
             },
         ],
     },

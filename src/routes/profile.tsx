@@ -123,8 +123,42 @@ export default function Profile() {
     const [editMode, setEditMode] = useState(false);
     const [bioEditMode, setBioEditMode] = useState(false);
     const [bio, setBio] = useState<string>('');
-    const [dogName, setDogName] = useState<string | null>(null); // 강아지 이름 상태
-    const [dogAge, setDogAge] = useState<number | null>(null); /
+    const [dogName, setDogName] = useState<string | null>(null);
+    const [dogAge, setDogAge] = useState<number | null>(null);
+
+    // 강아지 정보 가져오기
+    const fetchDogInfo = async () => {
+        if (!user) return;
+        try {
+            const apiURL = `http://192.168.0.248:8080/api/v1/user/userPetInfoSelect`;
+            const requestBody = {
+                useremail: user.email,
+            };
+            const response = await fetch(apiURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            });
+            const data = await response.json();
+            if (data && data[0]) {
+                setDogName(data[0].petname || 'No pet name');
+                setDogAge(data[0].petage || null);
+            }
+        } catch (error) {
+            console.log('Error fetching dog info:', error);
+        }
+    };
+
+    // 강아지 나이 계산
+    const calculateDogAge = (birthYear: number | null): number | string => {
+        if (birthYear === null) {
+            return 'Age not available';
+        }
+        const currentYear = new Date().getFullYear();
+        return currentYear - birthYear;
+    };
 
     // 자기소개글 가져오기
     const fetchBio = async () => {
@@ -263,6 +297,7 @@ export default function Profile() {
     useEffect(() => {
         fetchTweets();
         fetchBio();
+        fetchDogInfo();
     }, []);
     return (
         <>
@@ -296,24 +331,23 @@ export default function Profile() {
                     {bioEditMode ? (
                         <>
                             <BioInput onChange={onBioChange} value={bio} />
-                            <button onClick={onBioSave}>Save</button>
                         </>
                     ) : (
                         <Bio>{bio ?? 'No bio yet'}</Bio>
+                    )}
+                    {dogName && dogAge !== null ? (
+                        <div>
+                            ,{dogName} ({calculateDogAge(dogAge)}세)
+                        </div>
+                    ) : (
+                        <div>강아지 정보가 없습니다.</div>
                     )}
                     <ChangeNameBtn1 src={pencil} onClick={() => setBioEditMode(!bioEditMode)} />
                 </BioWrapper>
 
                 <MyPageSelector />
-                {/* <>
-                    <Tweets>
-                        {tweets.map((tweet) => (
-                            <Tweet key={tweet.id} {...tweet} />
-                        ))}
-                    </Tweets>
-                </> */}
 
-                <AvatarGrid>
+                {/* <AvatarGrid>
                     {tweets.map((tweet, index) => (
                         <AvatarImgGrid
                             key={index}
@@ -321,7 +355,7 @@ export default function Profile() {
                             alt={`Tweet ${index + 1}`}
                         />
                     ))}
-                </AvatarGrid>
+                </AvatarGrid> */}
             </Wrapper>
         </>
     );

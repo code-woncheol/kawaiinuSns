@@ -5,6 +5,7 @@ import { auth } from '../firebase';
 import vectorSVG from '../assets/Vector.svg';
 import trash from '../assets/trash.svg';
 import pencil from '../assets/pencil.svg';
+
 const CommentWhole = styled.div`
     width: 100vh;
 `;
@@ -58,12 +59,13 @@ const SubmitButton = styled.button`
 `;
 
 const DeletButton = styled.img`
-    width: 24px;
+    width: 15px;
     cursor: pointer; /* 클릭 가능하게 만듦 */
+    margin-left: 320px;
 `;
 
 const EditComment = styled.img`
-    width: 24px;
+    width: 14px;
     cursor: pointer;
     margin-left: 8px; /* 필요하면 여백 추가 */
 `;

@@ -1,5 +1,6 @@
 import Kawaiinu from './kawaiinu';
 import UploadBtn from './uploadBtn';
+import BellBtn from './bellBtn';
 import styled from 'styled-components';
 const Header = styled.div`
     position: fixed;
@@ -40,6 +41,7 @@ export default function MainpageHeader() {
                 <Header>
                     <Kawaiinu />
                     <UploadBtn />
+                    <BellBtn />
                 </Header>
             </Wrapper>
         </>
